@@ -33,7 +33,7 @@ MODEL_NAME_CANDIDATES = [
     "ssdlite_mobilenet_v2",
 ]
 MODELS_ROOT = Path("models")
-ANNOTATED_IMAGE = Path("sample_street_detections.jpg")
+ANNOTATED_IMAGE = Path("detections.jpg")
 
 
 def run_cmd(args: list[str]) -> None:
