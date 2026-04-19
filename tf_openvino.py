@@ -15,7 +15,14 @@ import openvino as ov
 model = tf.keras.applications.MobileNetV2(weights='imagenet')
 
 
+# convert the model into OpenVINO model
+ov_model = ov.convert_model(model)
+
+# compile the model for CPU device
 core = ov.Core()
+compiled_model = core.compile_model(ov_model, 'CPU')
+
+
 
 def main():
     devices = core.available_devices
