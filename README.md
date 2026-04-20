@@ -16,17 +16,6 @@ source .venv/bin/activate
 python openvino/hello_openvino.py
 ```
 
-## 📋 Table of Contents
-
-- [Overview](#overview)
-- [Features](#features)
-- [System Requirements](#system-requirements)
-- [Installation](#installation)
-- [Usage Examples](#usage-examples)
-- [Project Structure](#project-structure)
-- [Performance Optimization](#performance-optimization)
-- [Troubleshooting](#troubleshooting)
-- [API Reference](#api-reference)
 
 ## 🎯 Overview
 
@@ -303,11 +292,6 @@ sudo bash scripts/install_driver.sh
 # 1. Use CPU instead of GPU for large models
 python openvino/mobilenetv2_object_detection.py --device CPU
 
-# 2. Reduce batch size or image resolution
-# (Modify the script to resize input images)
-
-# 3. Monitor memory usage
-watch -n 1 'free -h && nvidia-smi 2>/dev/null || echo "No NVIDIA GPU"'
 ```
 
 #### Import Errors
@@ -329,26 +313,10 @@ python -c "import openvino; print(openvino.__version__)"
 echo $PYTHONPATH
 ```
 
-#### Performance Issues
 
-**Symptoms**: Slow inference performance
-
-**Solutions**:
-```bash
-# 1. Benchmark different devices
-python openvino/test_ov.py --benchmark --device GPU
-python openvino/test_ov.py --benchmark --device CPU
-
-# 2. Use AUTO device for optimal selection
-python openvino/mobilenetv2_object_detection.py --device AUTO
-
-# 3. Enable performance hints
-# (Add performance hints to model compilation)
-```
 
 ### Debug Mode
 
-Enable comprehensive debugging:
 
 ```bash
 # Set debug environment variables
@@ -364,7 +332,6 @@ python openvino/mobilenetv2_object_detection.py --debug --device GPU
 1. **Check Logs**: Always run with `--debug` flag first
 2. **Verify Installation**: Run `hello_openvino.py --debug`
 3. **System Info**: Use `scripts/debug_intel.sh` for system diagnostics
-4. **Community**: Open an issue on GitHub with detailed error logs
 
 ## 📚 API Reference
 
@@ -402,21 +369,6 @@ config = {
 - `CUMULATIVE_THROUGHPUT`: Multi-stream optimization
 
 
-### Development Setup
-
-```bash
-git clone https://github.com/micrometre/openvino.git
-cd intel-iris
-./setup.sh
-source .venv/bin/activate
-```
-
-### Code Standards
-
-- **Python**: Follow PEP 8 style guidelines
-- **Documentation**: Use docstrings for all functions
-- **Testing**: Include tests with pull requests
-- **Commits**: Use conventional commit messages
 
 
 ## 📖 References
