@@ -18,6 +18,7 @@ echo "✅ Virtual environment activated"
 # Upgrade pip
 echo "⬆️  Upgrading pip..."
 pip install --upgrade pip
+pip install setuptools
 
 # Install requirements 
 echo "📥 Installing  dependencies..."
