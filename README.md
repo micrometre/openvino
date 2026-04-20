@@ -393,10 +393,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- Intel OpenVINO Team for the excellent inference engine
-- Open Model Zoo contributors for pre-trained models
-- TensorFlow team for model conversion tools
-- The open-source community for feedback and contributions
+- Intel OpenVINO 
+- TensorFlow 
 
 ---
 
