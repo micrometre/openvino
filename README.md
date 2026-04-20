@@ -2,7 +2,6 @@
 
 [![OpenVINO](https://img.shields.io/badge/OpenVINO-2024.0+-blue.svg)](https://docs.openvino.ai/)
 [![Python](https://img.shields.io/badge/Python-3.8+-green.svg)](https://www.python.org/)
-[![Ubuntu](https://img.shields.io/badge/Ubuntu-24.04-orange.svg)](https://ubuntu.com/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 Complete setup and optimization guide for Intel Iris Xe Graphics with OpenVINO on Ubuntu 24.04. This repository provides production-ready examples for high-performance inference on Intel integrated GPUs.
