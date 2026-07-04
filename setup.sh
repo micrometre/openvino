@@ -8,7 +8,7 @@ echo "=================================================================="
 
 # Create virtual environment
 echo "📦 Creating virtual environment..."
-python3 -m venv .venv
+python3.12 -m venv .venv
 echo "✅ Virtual environment created in .venv/"
 
 # Activate virtual environment
