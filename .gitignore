@@ -65,9 +65,14 @@ logs/
 # Output files
 output/
 results/
+# Ignore images by default
 *.jpg
 *.png
-!images/
+# Allow specific images in images folder
+!images/demo.png
+!images/graph_plot.png
+!images/screenshot_26.04.png
+!images/1.jpg
 
 # Temporary files
 *.tmp
