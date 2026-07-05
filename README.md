@@ -3,13 +3,14 @@
 [![OpenVINO](https://img.shields.io/badge/OpenVINO-2024.0+-blue.svg)](https://docs.openvino.ai/)
 [![Python](https://img.shields.io/badge/Python-3.8+-green.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Ubuntu](https://img.shields.io/badge/Ubuntu-24.04%2B-orange.svg)](https://ubuntu.com/)
 
-Complete setup and optimization guide for Intel Iris Xe Graphics with OpenVINO on Ubuntu 24.04. This repository provides production-ready examples for high-performance inference on Intel integrated GPUs.
+Complete setup and optimization guide for Intel Iris Xe Graphics with OpenVINO on Ubuntu 24.04+. This repository provides production-ready examples for high-performance inference on Intel integrated GPUs, with enhanced support for Ubuntu 26.04 LTS optimizations.
 
 ## 🚀 Quick Start
 
 ```bash
-git clone https://github.com/micrometre/openvino.git intel-iris
+git clone https://github.com/micrometre/openvino.git 
 cd intel-iris
 ./setup.sh
 source .venv/bin/activate
@@ -19,7 +20,32 @@ python openvino/hello_openvino.py
 
 ## 🎯 Overview
 
-This repository provides a comprehensive toolkit for leveraging Intel Iris Xe Graphics with OpenVINO inference engine. It includes optimized models, example applications, and automated setup scripts specifically designed for Ubuntu 24.04 and Intel Raptor Lake processors.
+### Visual Showcase
+
+![Object Detection Demo](images/demo.png)
+
+*Object detection in action with Intel Iris Xe GPU acceleration*
+
+![Performance Comparison](images/graph_plot.png)
+
+*CPU vs GPU performance benchmarking results*
+
+![Ubuntu 26.04 Inference](images/screenshot_26.04.png)
+
+*OpenVINO inference running on Ubuntu 26.04 LTS*
+
+This repository provides a comprehensive toolkit for leveraging Intel Iris Xe Graphics with OpenVINO inference engine. It includes optimized models, example applications, and automated setup scripts specifically designed for Ubuntu 24.04+ and Intel Raptor Lake processors.
+
+### Ubuntu 26.04 LTS Optimizations
+
+Ubuntu 26.04 LTS brings significant enhancements for AI development with OpenVINO:
+
+- **Native Driver Support**: OpenVINO is integrated into the Ubuntu archive, eliminating the need for third-party repositories
+- **Security & Provenance**: Official Ubuntu packages ensure security updates and verified software sources
+- **Hardware Integration**: Seamless support for Intel GPU acceleration with optimized kernel drivers
+- **Inference Snaps**: Hassle-free access to silicon-optimized models through Ubuntu's inference snap ecosystem
+
+For more details on Ubuntu's AI development initiatives, see [Developing with AI on Ubuntu](https://discourse.ubuntu.com/t/developing-with-ai-on-ubuntu/75299).
 
 ### Key Benefits
 
@@ -36,6 +62,7 @@ This repository provides a comprehensive toolkit for leveraging Intel Iris Xe Gr
 - **Intel Iris Xe Support**: Full GPU acceleration for compatible Intel processors
 - **Multi-Device Inference**: Seamless switching between CPU, GPU, and automatic device selection
 - **Model Zoo Integration**: Pre-configured MobileNet v1/v2 SSD models from Open Model Zoo
+- **CPU vs GPU Benchmarking**: Comprehensive performance comparison notebook for device optimization
 
 ### Advanced Features
 - **TensorFlow Compatibility**: Direct TensorFlow model conversion and inference
@@ -59,9 +86,10 @@ This repository provides a comprehensive toolkit for leveraging Intel Iris Xe Gr
 - **Graphics**: Intel integrated GPU with driver support
 
 ### Software Requirements
-- **Operating System**: Ubuntu 24.04 LTS (tested and verified)
+- **Operating System**: Ubuntu 24.04 LTS+ (tested and verified, with enhanced support for Ubuntu 26.04 LTS)
 - **Python**: 3.8+ (3.10+ recommended)
 - **Git**: For repository cloning and version control
+- **Jupyter**: For notebook-based benchmarking (optional, for CPU vs GPU comparison)
 
 ### Optional Requirements
 - **Docker**: For containerized deployments
@@ -120,6 +148,25 @@ python openvino/hello_openvino.py --debug
 
 Expected output should show available devices including GPU.
 
+### Ubuntu 26.04 LTS Specific Notes
+
+On Ubuntu 26.04 LTS, you can leverage the native OpenVINO packages from the Ubuntu archive:
+
+```bash
+# On Ubuntu 26.04 LTS, OpenVINO is available directly
+sudo apt update
+sudo apt install openvino-runtime openvino-dev
+
+# The repository setup scripts will automatically detect and use
+# the native packages when available
+./setup.sh
+```
+
+This provides:
+- **Simplified Installation**: No need for external repositories
+- **Automatic Security Updates**: Through the standard Ubuntu package management
+- **Better Integration**: Optimized for Ubuntu 26.04 kernel and driver stack
+
 ## 💡 Usage Examples
 
 ### Hello World Example
@@ -155,6 +202,32 @@ python openvino/mobilenetv2_object_detection.py \
   --debug \
   --show-confidence
 ```
+
+### CPU vs GPU Performance Comparison
+
+**⭐ Main Feature**: Comprehensive benchmarking notebook for comparing CPU and GPU inference performance.
+
+```bash
+# Install Jupyter if not already installed
+pip install jupyter
+
+# Start Jupyter notebook
+jupyter notebook openvino/openvino_cpu_vs_gpu_detection.ipynb
+```
+
+The notebook provides:
+- **Automated Benchmarking**: Runs multiple inference iterations on both CPU and GPU
+- **Performance Metrics**: Average time, standard deviation, min/max times, and FPS calculations
+- **Speedup Analysis**: Direct comparison showing GPU vs CPU performance gains
+- **Detection Verification**: Ensures accuracy consistency between devices
+- **Visualization**: Displays detection results with annotated images
+- **Configurable Parameters**: Adjustable warmup runs, benchmark iterations, and confidence thresholds
+
+This notebook is essential for:
+- Optimizing device selection for your specific hardware
+- Understanding performance characteristics of different inference backends
+- Validating that GPU acceleration provides meaningful speedup for your use case
+- Production deployment planning and resource allocation
 
 #### Command Line Arguments
 - `--device`: Target inference device (`CPU`, `GPU`, `AUTO`, `MULTI`)
@@ -202,6 +275,7 @@ intel-iris/
 ├── openvino/                         # Core OpenVINO examples
 │   ├── hello_openvino.py            # Hello World example
 │   ├── mobilenetv2_object_detection.py # Object detection demo
+│   ├── openvino_cpu_vs_gpu_detection.ipynb # CPU vs GPU benchmarking notebook (⭐ Main Feature)
 │   ├── classify_tf_imagenet.py       # TensorFlow image classification
 │   ├── convert_tf_imagenet.py        # TensorFlow model conversion
 │   └── test_ov.py                    # Testing conversion utilities
@@ -377,6 +451,7 @@ config = {
 - [OpenVINO Documentation](https://docs.openvino.ai/)
 - [Open Model Zoo](https://github.com/openvinotoolkit/open_model_zoo)
 - [Intel GPU Drivers](https://www.intel.com/content/www/us/en/support/products/80939/graphics.html)
+- [Developing with AI on Ubuntu](https://discourse.ubuntu.com/t/developing-with-ai-on-ubuntu/75299) - Ubuntu's AI development initiatives and OpenVINO integration
 
 ### Performance Guides
 - [OpenVINO Performance Guide](https://docs.openvino.ai/latest/openvino_docs_OV_UG_Performance.html)
