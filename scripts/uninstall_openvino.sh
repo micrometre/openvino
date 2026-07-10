@@ -3,7 +3,7 @@ set -euo pipefail
 
 ####################################
 # Intel OpenVINO uninstallation script
-# Supported: Ubuntu 24.04
+# Supported: Ubuntu 26.04
 ####################################
 
 RED='\033[0;31m'

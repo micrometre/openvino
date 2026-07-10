@@ -3,7 +3,7 @@
 #
 # Intel Iris Xe GPU Uninstallation Script
 # Reverses the installation from install_driver.sh
-# Optimized for Intel Iris Xe GPU on Ubuntu 24.04
+# Optimized for Intel Iris Xe GPU on Ubuntu 26.04
 # Dell Latitude 7340 (0C08)
 #
 ####################################
@@ -15,8 +15,11 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
+# Detect Ubuntu codename dynamically
+UBUNTU_CODENAME=$(lsb_release -cs 2>/dev/null || echo "unknown")
+
 echo -e "${GREEN}Intel Iris Xe GPU Uninstallation${NC}"
-echo -e "${BLUE}Dell Latitude 7340 - Ubuntu 24.04${NC}"
+echo -e "${BLUE}Dell Latitude 7340 - Ubuntu 26.04 (${UBUNTU_CODENAME})${NC}"
 echo ""
 
 # Function to remove packages safely
@@ -83,7 +86,7 @@ remove_repository "intel-graphics.list" "Intel Graphics"
 remove_gpg_key "intel-graphics.gpg" "Intel Graphics"
 
 # Remove Vulkan repository
-remove_repository "lunarg-vulkan-noble.list" "Lunarg Vulkan"
+remove_repository "lunarg-vulkan-${UBUNTU_CODENAME}.list" "Lunarg Vulkan"
 remove_gpg_key "lunarg-graphics.gpg" "Lunarg Vulkan"
 
 # Update package lists
@@ -118,7 +121,7 @@ else
 fi
 
 # Check for remaining repositories
-if [ ! -f "/etc/apt/sources.list.d/intel-graphics.list" ] && [ ! -f "/etc/apt/sources.list.d/lunarg-vulkan-noble.list" ]; then
+if [ ! -f "/etc/apt/sources.list.d/intel-graphics.list" ] && [ ! -f "/etc/apt/sources.list.d/lunarg-vulkan-${UBUNTU_CODENAME}.list" ]; then
     echo -e "${GREEN}✓ Repositories removed${NC}"
 else
     echo -e "${YELLOW}⚠ Some repositories may remain${NC}"

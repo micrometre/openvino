@@ -2,7 +2,7 @@
 ####################################
 #
 # Intel Iris Xe GPU Installation Script
-# Optimized for Intel Iris Xe GPU on Ubuntu 24.04
+# Optimized for Intel Iris Xe GPU on Ubuntu 26.04
 # Dell Latitude 7340 (0C08)
 #
 ####################################
@@ -14,15 +14,18 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
+# Detect Ubuntu codename dynamically
+UBUNTU_CODENAME=$(lsb_release -cs 2>/dev/null || echo "unknown")
+
 echo -e "${GREEN}Intel Iris Xe GPU support${NC}"
-echo -e "${BLUE}Dell Latitude 7340 - Ubuntu 24.04${NC}"
+echo -e "${BLUE}Dell Latitude 7340 - Ubuntu 26.04 (${UBUNTU_CODENAME})${NC}"
 echo ""
 
 # Update system
 echo -e "${YELLOW}Updating system packages...${NC}"
 sudo apt update && sudo apt upgrade -y
 
-# Install Intel GPU runtime packages for Ubuntu 24.04
+# Install Intel GPU runtime packages for Ubuntu 26.04
 echo -e "${YELLOW}Installing Intel GPU runtime...${NC}"
 
 # Core OpenCL packages
@@ -31,7 +34,7 @@ sudo apt install -y intel-opencl-icd ocl-icd-opencl-dev clinfo
 # Try to install Intel compute runtime packages
 echo -e "${YELLOW}Installing Intel Level Zero runtime...${NC}"
 
-# For Ubuntu 24.04, try the package from repos first
+# For Ubuntu 26.04, try the package from repos first
 if apt-cache search intel-level-zero | grep -q level-zero; then
     sudo apt install -y intel-level-zero-gpu level-zero level-zero-dev
     echo -e "${GREEN}✓ Installed Level Zero from repository${NC}"
@@ -40,7 +43,7 @@ else
     
     # Add Intel's repository for newer packages
     wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | sudo gpg --dearmor --output /usr/share/keyrings/intel-graphics.gpg
-    echo "deb [arch=amd64,i386 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu noble client" | sudo tee /etc/apt/sources.list.d/intel-graphics.list
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu ${UBUNTU_CODENAME} client" | sudo tee /etc/apt/sources.list.d/intel-graphics.list
     
     sudo apt update
     
@@ -72,9 +75,9 @@ else
         echo -e "${RED}Warning: Failed to add Lunarg signing key${NC}"
     }
     
-    # Add repository source for Ubuntu 24.04 (noble)
-    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/lunarg-graphics.gpg] https://packages.lunarg.com/vulkan noble main" | \
-        sudo tee /etc/apt/sources.list.d/lunarg-vulkan-noble.list > /dev/null || {
+    # Add repository source for detected Ubuntu codename
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/lunarg-graphics.gpg] https://packages.lunarg.com/vulkan ${UBUNTU_CODENAME} main" | \
+        sudo tee /etc/apt/sources.list.d/lunarg-vulkan-${UBUNTU_CODENAME}.list > /dev/null || {
         echo -e "${RED}Warning: Failed to add Vulkan repository${NC}"
     }
     

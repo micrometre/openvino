@@ -2,7 +2,7 @@
 ####################################
 #
 # Intel Iris Xe GPU Debug Script
-# For Ubuntu 24.04 on Dell Latitude 7340
+# For Ubuntu 26.04 on Dell Latitude 7340
 #
 ####################################
 
@@ -15,7 +15,7 @@ NC='\033[0m' # No Color
 
 echo -e "${BLUE}=========================================${NC}"
 echo -e "${BLUE}Intel Iris Xe GPU Debug Script${NC}"
-echo -e "${BLUE}Ubuntu 24.04 - Dell Latitude 7340${NC}"
+echo -e "${BLUE}Ubuntu 26.04 - Dell Latitude 7340${NC}"
 echo -e "${BLUE}=========================================${NC}"
 echo ""
 

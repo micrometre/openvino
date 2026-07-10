@@ -3,9 +3,9 @@
 [![OpenVINO](https://img.shields.io/badge/OpenVINO-2024.0+-blue.svg)](https://docs.openvino.ai/)
 [![Python](https://img.shields.io/badge/Python-3.8+-green.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Ubuntu](https://img.shields.io/badge/Ubuntu-24.04%2B-orange.svg)](https://ubuntu.com/)
+[![Ubuntu](https://img.shields.io/badge/Ubuntu-26.04%2B-orange.svg)](https://ubuntu.com/)
 
-Complete setup and optimization guide for Intel Iris Xe Graphics with OpenVINO on Ubuntu 24.04+. This repository provides production-ready examples for high-performance inference on Intel integrated GPUs, with enhanced support for Ubuntu 26.04 LTS optimizations.
+Complete setup and optimization guide for Intel Iris Xe Graphics with OpenVINO on Ubuntu 26.04 LTS. This repository provides production-ready examples for high-performance inference on Intel integrated GPUs.
 
 ## 🚀 Quick Start
 
@@ -34,7 +34,7 @@ python openvino/hello_openvino.py
 
 *OpenVINO inference running on Ubuntu 26.04 LTS*
 
-This repository provides a comprehensive toolkit for leveraging Intel Iris Xe Graphics with OpenVINO inference engine. It includes optimized models, example applications, and automated setup scripts specifically designed for Ubuntu 24.04+ and Intel Raptor Lake processors.
+This repository provides a comprehensive toolkit for leveraging Intel Iris Xe Graphics with OpenVINO inference engine. It includes optimized models, example applications, and automated setup scripts specifically designed for Ubuntu 26.04 LTS and Intel Raptor Lake processors.
 
 ### Ubuntu 26.04 LTS Optimizations
 
@@ -86,7 +86,7 @@ For more details on Ubuntu's AI development initiatives, see [Developing with AI
 - **Graphics**: Intel integrated GPU with driver support
 
 ### Software Requirements
-- **Operating System**: Ubuntu 24.04 LTS+ (tested and verified, with enhanced support for Ubuntu 26.04 LTS)
+- **Operating System**: Ubuntu 26.04 LTS (tested and verified)
 - **Python**: 3.8+ (3.10+ recommended)
 - **Git**: For repository cloning and version control
 - **Jupyter**: For notebook-based benchmarking (optional, for CPU vs GPU comparison)
@@ -237,6 +237,29 @@ This notebook is essential for:
 - `--debug`: Enable verbose debug output
 - `--show-confidence`: Display confidence scores for detections
 
+### Benchmarking with benchmark_app
+
+> **Note:** The system `/usr/bin/benchmark_app` crashes on Ubuntu 26.04 due to a broken
+> `python3-openvino-2026.2.1` APT package (missing `AxisSet` symbol in `_pyopenvino.so` for Python 3.14).
+> Always use the `.venv` version instead.
+
+```bash
+# CPU benchmark
+.venv/bin/benchmark_app \
+  -m models/public/ssd_mobilenet_v1_fpn_coco/FP16/ssd_mobilenet_v1_fpn_coco.xml \
+  -d CPU
+
+# GPU benchmark
+.venv/bin/benchmark_app \
+  -m models/public/ssd_mobilenet_v1_fpn_coco/FP16/ssd_mobilenet_v1_fpn_coco.xml \
+  -d GPU
+
+# Latency-optimised run
+.venv/bin/benchmark_app \
+  -m models/public/ssd_mobilenet_v1_fpn_coco/FP16/ssd_mobilenet_v1_fpn_coco.xml \
+  -d GPU -hint latency -niter 100
+```
+
 ### TensorFlow Integration
 
 Convert and run TensorFlow models:
@@ -270,7 +293,8 @@ intel-iris/
 │   ├── install_driver.sh             # Intel GPU driver setup
 │   ├── uninstall_openvino.sh         # OpenVINO cleanup
 │   ├── uninstall_driver.sh           # Driver cleanup
-│   └── debug_intel.sh                # Intel GPU debugging utilities
+│   ├── debug_intel.sh                # Intel GPU / hardware debugging
+│   └── debug_openvino.sh             # OpenVINO installation debugging
 │
 ├── openvino/                         # Core OpenVINO examples
 │   ├── hello_openvino.py            # Hello World example
@@ -370,7 +394,7 @@ python openvino/mobilenetv2_object_detection.py --device CPU
 
 #### Import Errors
 
-**Symptoms**: ModuleNotFoundError for OpenVINO packages
+**Symptoms**: `ModuleNotFoundError` or `ImportError: cannot import name 'AxisSet'` for OpenVINO packages
 
 **Solutions**:
 ```bash
@@ -385,6 +409,22 @@ python -c "import openvino; print(openvino.__version__)"
 
 # 4. Check Python path
 echo $PYTHONPATH
+```
+
+#### benchmark_app Crashes on Launch
+
+**Symptoms**: `ImportError: cannot import name 'AxisSet' from 'openvino._pyopenvino'` / crash report in `/var/crash/`
+
+**Cause**: The `python3-openvino-2026.2.1` APT package has a broken native extension (`_pyopenvino.so`) under Python 3.14. The system `/usr/bin/benchmark_app` uses the system Python and hits this bug.
+
+**Solution**: Use the `.venv` binary which runs openvino 2024.6.0 under Python 3.12:
+```bash
+.venv/bin/benchmark_app -m <model.xml> -d CPU
+```
+
+To diagnose the full installation state:
+```bash
+bash scripts/debug_openvino.sh
 ```
 
 
@@ -405,7 +445,8 @@ python openvino/mobilenetv2_object_detection.py --debug --device GPU
 
 1. **Check Logs**: Always run with `--debug` flag first
 2. **Verify Installation**: Run `hello_openvino.py --debug`
-3. **System Info**: Use `scripts/debug_intel.sh` for system diagnostics
+3. **OpenVINO Install Diagnostics**: Run `bash scripts/debug_openvino.sh` — checks APT packages, shared libraries, Python module, available devices, key dependencies, and runs a CPU smoke test
+4. **GPU / Hardware Diagnostics**: Run `bash scripts/debug_intel.sh` for driver, OpenCL, Level Zero, and device permission checks
 
 ## 📚 API Reference
 

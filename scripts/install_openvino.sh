@@ -3,7 +3,7 @@ set -euo pipefail
 
 ####################################
 # Intel OpenVINO installation script
-# Supported: Ubuntu 24.04
+# Supported: Ubuntu 26.04
 ####################################
 
 RED='\033[0;31m'
@@ -53,25 +53,51 @@ if [[ "$ID" != "ubuntu" ]]; then
   abort "Unsupported distribution: $ID. This installer supports Ubuntu only."
 fi
 
-if [[ "$VERSION_ID" != "24.04" ]]; then
-  warn "This script is optimized for Ubuntu 24.04. Detected $VERSION_ID. It may still work, but proceed with caution."
+if [[ "$VERSION_ID" != "26.04" ]]; then
+  warn "This script is optimized for Ubuntu 26.04. Detected $VERSION_ID. It may still work, but proceed with caution."
 fi
 
 check_command wget
 check_command gpg
 check_command apt-get
 
-REPO_CODENAME="ubuntu24"
 REPO_URL="https://apt.repos.intel.com/openvino"
 KEY_URL="https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB"
 KEYRING_PATH="/usr/share/keyrings/intel-openvino-archive-keyring.gpg"
 LIST_PATH="/etc/apt/sources.list.d/intel-openvino.list"
-PACKAGE_NAME="openvino"  # Will auto-detect version if specific version is unavailable
 
 info "Installing prerequisite packages..."
 apt-get update -qq 2>/dev/null || true
 apt-get install -y --no-install-recommends ca-certificates wget gnupg curl >/dev/null
 success "Prerequisites are installed."
+
+# On Ubuntu 26.04+, try native archive packages first (no external repo needed)
+if [[ "$VERSION_ID" == "26.04" ]]; then
+  info "Ubuntu 26.04 detected — checking native archive for OpenVINO..."
+  apt-get update -qq 2>/dev/null || true
+  if apt-cache show openvino-runtime &>/dev/null || apt-cache show openvino &>/dev/null; then
+    info "Native OpenVINO packages found in Ubuntu archive."
+    if apt-cache show openvino-runtime &>/dev/null; then
+      package_to_install="openvino-runtime"
+    else
+      package_to_install="openvino"
+    fi
+    info "Installing OpenVINO from native Ubuntu archive ($package_to_install)..."
+    apt-get install -y "$package_to_install"
+    success "OpenVINO installed successfully from native Ubuntu archive."
+    echo
+    echo -e "${GREEN}Next steps:${NC}"
+    echo "  1. Reboot your system if prompted."
+    echo "  2. Verify installation with: apt-cache policy $package_to_install"
+    echo "  3. Run OpenVINO demos or use the Python/OpenVINO SDK as needed."
+    exit 0
+  else
+    warn "Native OpenVINO packages not found. Falling back to Intel's APT repository..."
+  fi
+fi
+
+# Fall back to Intel's APT repository (latest available codename: ubuntu24)
+REPO_CODENAME="ubuntu24"
 
 info "Downloading Intel OpenVINO GPG key..."
 wget -qO /tmp/intel-openvino-key.pub "$KEY_URL"
@@ -96,9 +122,9 @@ fi
 rm -f /tmp/intel-openvino-key.pub /tmp/intel-openvino-archive-keyring.gpg
 success "GPG key installed at $KEYRING_PATH."
 
-info "Registering Intel OpenVINO APT repository..."
+info "Registering Intel OpenVINO APT repository (${REPO_CODENAME})..."
 mkdir -p /etc/apt/sources.list.d
-echo "deb [signed-by=${KEYRING_PATH}] ${REPO_URL} ${REPO_CODENAME} main" | tee "$LIST_PATH" >/dev/null
+echo "deb [arch=amd64 signed-by=${KEYRING_PATH}] ${REPO_URL} ${REPO_CODENAME} main" | tee "$LIST_PATH" >/dev/null
 success "Repository added to $LIST_PATH."
 
 info "Refreshing package lists with signed repository..."
@@ -140,7 +166,7 @@ info "Installation finished."
 echo
 echo -e "${GREEN}Next steps:${NC}"
 echo "  1. Reboot your system if prompted."
-echo "  2. Verify installation with: apt-cache policy $PACKAGE_NAME"
+echo "  2. Verify installation with: apt-cache policy $package_to_install"
 echo "  3. Run OpenVINO demos or use the Python/OpenVINO SDK as needed."
 
 exit 0
