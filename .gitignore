@@ -1,0 +1,84 @@
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# Models
+models/
+models_cache/
+*.pt
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.env.local
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# OpenVINO & Models
+# Large model files
+*.pb
+*.xml
+*.bin
+*.onnx
+*.caffemodel
+*.ckpt*
+saved_model/
+checkpoint
+
+# OpenVINO cache files
+*.cl_cache
+*.blob
+
+# Logs
+logs/
+*.log
+
+# Output files
+output/
+results/
+# Ignore images by default
+*.jpg
+*.png
+# Allow specific images in images folder
+!images/demo.png
+!images/graph_plot.png
+!images/screenshot_26.04.png
+!images/sample.jpg
+
+# Temporary files
+*.tmp
+*.temp

@@ -1,0 +1,8 @@
+openvino==2026.2.1
+numpy
+tensorflow
+tensorflow-hub
+Pillow
+setuptools
+matplotlib
+ultralytics
